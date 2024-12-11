@@ -23,7 +23,7 @@ def analyze_biometric_data(data):
     # Blood Oxygen Analysis
     blood_oxygen = data.get('blood_oxygen', None)
     if blood_oxygen is not None:
-        if blood_oxygen < 90:
+        if blood_oxygen < 95:
             results['blood_oxygen_issue'] = "Low blood oxygen levels detected."
         else:
             results['blood_oxygen_issue'] = "Blood oxygen levels are normal."
@@ -33,7 +33,7 @@ def analyze_biometric_data(data):
     # Glucose Level Analysis
     glucose_level = data.get('glucose_level', None)
     if glucose_level is not None:
-        if glucose_level < 70 or glucose_level > 140:
+        if glucose_level < 70 or glucose_level >= 200:
             results['glucose_level_issue'] = "Abnormal glucose levels detected."
         else:
             results['glucose_level_issue'] = "Glucose levels are normal."
