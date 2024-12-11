@@ -60,5 +60,9 @@ def get_data(user_id):
   
   return success_response(data.serialize())
 
+@app.route("/data/")
+def get_all_data():
+  return success_response({"data": [u.serialize() for u in HealthData.query.all()]})
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
