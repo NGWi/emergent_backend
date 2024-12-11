@@ -35,6 +35,7 @@ def base():
 @app.route("/data/", methods=["POST"])
 def create_data():
   body = json.loads(request.data)
+
   heart_rate = body.get("heart_rate")
   blood_oxygen = body.get("blood_oxygen")
   glucose_level = body.get("glucose_level")
@@ -51,9 +52,21 @@ def create_data():
         longitude=longitude,
         timestamp = datetime.now()
     )
+
   db.session.add(new_data)
   db.session.commit()
-  return success_response(new_data.serialize(), 201)
+
+  analysis_results = analyze_biometric_data({
+    'heart_rate': heart_rate,
+    'blood_oxygen': blood_oxygen,
+    'glucose_level': glucose_level,
+    'hrv': hrv
+  })
+
+  return success_response({
+        'data': new_data.serialize(),
+        'analysis': analysis_results
+        }, 201)
 
 @app.route("/data/<int:user_id>/")
 def get_data(user_id):
@@ -71,19 +84,18 @@ def get_all_data():
 @app.route('/analyze', methods=['POST'])
 def analyze():
     """
-    API endpoint to analyze biometric data.
-    Expects JSON data with 'heart_rate' and 'blood_pressure'.
+    API endpoint to just analyze the biometric data.
     """
     data = request.json
 
-    # Validate input
-    if 'heart_rate' not in data or 'blood_pressure' not in data:
-        return jsonify({"error": "Invalid input"}), 400
+    analysis_results = analyze_biometric_data({
+        'heart_rate': data.get('heart_rate'),
+        'blood_oxygen': data.get('blood_oxygen'),
+        'glucose_level': data.get('glucose_level'),
+        'hrv': data.get('hrv')
+    })
 
-    # Analyze the data
-    analysis_results = analyze_biometric_data(data)
+    return success_response(analysis_results)
 
-    return jsonify(analysis_results)
-    
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
