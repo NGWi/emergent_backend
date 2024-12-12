@@ -1,4 +1,4 @@
-from .. protocols.analysis import analyze_proto
+from protocols.analysis import analyze_proto
 from uagents import Agent
 
 analysis_agent = Agent(

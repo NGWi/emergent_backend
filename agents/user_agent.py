@@ -1,5 +1,5 @@
 from ..protocols.analysis import AnalyzeRequest, AnalyzeResponse
-from uagents import Agent, Context
+from uagentss import Agent, Context
 
 ANALYSIS_AGENT_ADDRESS = "test-agent://biometric_analysis_agent_address"
 
